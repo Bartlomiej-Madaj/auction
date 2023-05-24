@@ -1,0 +1,24 @@
+body {
+    padding: 10px;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.clickable {
+    transition: transform 250ms ease-in-out;
+}
+
+a:hover .clickable{
+    transform: scale(1.01);
+}
+
+.listing_card {
+    max-width:  60rem;
+}
+
+.listing_image {
+    max-width: 25rem;
+    margin: 0 auto;
+}

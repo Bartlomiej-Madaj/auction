@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+    {% for listing in listings %}
+            <div class="card my-5 listing_card mx-auto">
+                <h3>Listing title - {{listing.title}}</h3>
+                <h3>Winner - {{listing.winner}}</h3>
+                <h4>Listing category - {{listing.category.name}}</h4>
+                <h5>Listing author - {{listing.author}}</h5>
+                <h5>Added date - {{listing.listing_date}}</h5>
+                <h5>Winner bid - ${{listing.current_bid.bid}}</h5>
+                <h5>Starting bid - ${{listing.starting_bid.bid}}</h5>
+                <article>
+                    <h5>Listing description:</h5>
+                    {{listing.description}}
+                </article>
+                <img class="listing_image" src="{{listing.url}}" alt="{{listing.title}}-image">
+            </div>
+    {% endfor %}
+
+{% endblock %}

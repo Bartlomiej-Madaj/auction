@@ -1,0 +1,101 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h2> Listing</h2>
+
+<div class="card my-3 clickable listing_card mx-auto">
+    {% if user.is_authenticated %}
+    <form style="position: absolute; top: 10px; right: 10px;" action="{% url 'watchlist' %}" method="post">
+        {% csrf_token %}
+        <input type="number" value="{{listing.id}}" hidden name="listing_id">
+        <input type="text" value="listing" hidden name="flag">
+        <button class="btn btn-primary" type="submit">
+            {% if text_button %}
+            {{text_button}}
+            {% endif %}
+        </button>
+    </form>
+    {% if listing.author == author %}
+    <form style="position: absolute; top: 60px; right: 10px;" action="{% url 'close_auction' %}" method="post">
+        {% csrf_token %}
+        <input type="number" value="{{listing.id}}" hidden name="listing_id">
+        <button class="btn btn-primary" type="submit">
+            Close the auction
+        </button>
+    </form>
+    {% endif %}
+
+
+    {% endif %}
+    <h3>Listing title - {{listing.title}}</h3>
+    <h5>Listing author - {{listing.author}}</h5>
+    <h5>Added date - {{listing.listing_date}}</h5>
+    <h5>Current bid - ${{listing.current_bid.bid}}</h5>
+    {% if user.is_authenticated %}
+    <form action="/bid" method="post">
+        {% csrf_token %}
+        <div style="width: 24rem" class="input-group my-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+                <span class="input-group-text">0.00</span>
+            </div>
+            <input name="bid_input" id="bid_input" type="number" step="0.01" min="{{listing.current_bid.bid}}"
+                value="{{listing.current_bid.bid}}">
+            <input type="number" value="{{listing.id}}" hidden name="listing_id">
+            <input style="width: 5rem" id="bid_button" class="btn btn-primary ml-1" type="submit" value="Bid">
+        </div>
+    </form>
+    {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == "bid_error error" %}
+    <span class="text-danger d-block my-1" id="bid_message">{{message}}</span>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <h5>Starting bid - ${{listing.starting_bid.bid}}</h5>
+    <article>
+        <h5>Listing description:</h5>
+        {{listing.description}}
+    </article>
+    <img class="listing_image" src="{{listing.url}}" alt="{{listing.title}}-image">
+    <section class="mx-3">
+        <h3>Comments</h3>
+        {% if user.is_authenticated %}
+        <form action="/comment" method="post">
+            {% csrf_token %}
+            <div class="form-floating">
+                <input type="number" value="{{listing.id}}" hidden name="listing_id">
+                <textarea name="comment" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                    style="height: 100px"></textarea>
+                <label for="floatingTextarea2"></label>
+            </div>
+            <button class="btn btn-primary" type="submit">Add comment</button>
+        </form>
+    </section>
+    {% endif %}
+
+    {% for comment in comments %}
+    <div class="card m-3">
+        <div class="card-body">
+            <h5 class="card-title">{{comment.author}}</h5>
+            <h6 class="card-title">{{comment.comment_date}}</h6>
+            {% if comment.author == author %}
+            <form style="position: absolute; top: 10px; right: 10px;" action="delete-comment" method="post">
+                {% csrf_token %}
+                <input type="number" value="{{listing.id}}" hidden name="listing_id">
+                <input type="number" value="{{comment.id}}" hidden name="comment_id">
+                <button class="btn btn-primary" type="submit">&#10006;</button>
+            </form>
+            {% endif %}
+            <article class="card-text">{{comment.content}}</article>
+        </div>
+    </div>
+    {% empty %}
+    <h3>No comments</h3>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

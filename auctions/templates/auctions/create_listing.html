@@ -1,0 +1,51 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<form action="{% url 'create_listing' %}" class="listing_card mx-auto" method="post">
+    {% csrf_token %}
+    <label class="h4" for="title">Listing Titile</label>
+    <input name="title" placeholder="Title..." type="text" class="form-control" aria-label="Default"
+        aria-describedby="inputGroup-sizing-default" id="title">
+    {% if title_message %}
+    <span class="text-danger d-block mt-2">{{title_message}}</span>
+    {% endif %}
+    <label class="h4 mt-2" for="listing_url">Your listing image</label>
+    <input name="listing_url" placeholder="URL..." type="url" class="form-control" aria-label="Default"
+        aria-describedby="inputGroup-sizing-default" id="listing_url">
+    <div class="input-group my-2">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="categories">Categories...</label>
+        </div>
+        <select class="custom-select" name="category" id="categories">
+            <option selected value="none">Choose...</option>
+            {% for category in categories %}
+            <option value="{{ category }}">{{ category}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% if category_message %}
+    <span class="text-danger d-block my-2">{{category_message}}</span>
+    {% endif %}
+
+    <div class="input-group my-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+            <span class="input-group-text">0.00</span>
+        </div>
+        <input name="starting_bid" placeholder="Your bid..." type="number" class="form-control"
+            aria-label="Amount (to the nearest dollar)" step="0.01" min="0">
+    </div>
+    {% if bid_message %}
+    <span class="text-danger d-block my-2">{{bid_message}}</span>
+    {% endif %}
+    <textarea class="form-control" name="description" id="description" cols="30" rows="10"
+        placeholder="Your listing descrition..."></textarea>
+    {% if description_message %}
+    <span class="text-danger d-block my-2">{{description_message}}</span>
+    {% endif %}
+    <div class="col d-flex justify-content-center">
+        <button type="submit" class="btn btn-success my-3 btn-lg">Add New Listing</button>
+    </div>
+
+</form>
+{% endblock %}
