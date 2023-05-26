@@ -2,9 +2,9 @@
 
 {% block body %}
     <h2>Categories</h2>
-
+    <ul class="list-group listing_card ">
     {% for category in categories %}
-        <a href="{% url 'category_listings' category.name %}"><li>{{category.name}}</li></a>
+        <a href="{% url 'category_listings' category.name %}"><li class="list-group-item my-1">{{category.name}}</li></a>
     {% endfor %}
-
+</ul>
 {% endblock %}
